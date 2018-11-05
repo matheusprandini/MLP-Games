@@ -89,5 +89,5 @@ def mlp_plays_catch_game():
 
 ####################################### MAIN #######################################
 
-#mlp_train_catch_game()
-mlp_plays_catch_game()
+mlp_train_catch_game()
+#mlp_plays_catch_game()
