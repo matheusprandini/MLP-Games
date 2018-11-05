@@ -3,7 +3,7 @@ Using MLP to play simple games - Machine Learning Course - UFU
 
 ## Getting Started
 
-Instrutions to run the project...
+Instructions to run the project...
 
 ### Prerequisites (Packages)
 ```
