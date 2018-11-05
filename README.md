@@ -26,6 +26,7 @@ git clone https://github.com/matheusprandini/MLP-Games.git
 
 Module to collect data from the catch game using an agent implemented with dqn technique.
 
+- **Data folder**: collected data files (move to the Data folder in the **NeuralNetworks** module to use them)
 - **CatchGame.py**: game environment.
 - **DQN.py**: agent implemented with dqn technique.
 - **Data.py**: responsible for collecting, saving and preprocessing the data from the interaction between the dqn agent and the catch game.
