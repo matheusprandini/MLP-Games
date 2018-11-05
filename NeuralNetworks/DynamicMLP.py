@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 # Implementation of the MLP class
 class MLP:

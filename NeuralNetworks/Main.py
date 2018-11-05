@@ -67,7 +67,7 @@ def mlp_train_catch_game():
     # Preprocess data
     inputs, labels = data.preprocessing_data()
 
-    mlp.training_mlp_any_layers_with_number_iterations(inputs[:12000], labels[:12000], 1000, 0.1)
+    mlp.training_mlp_any_layers_with_number_iterations(inputs[:10000], labels[:10000], 10, 0.1)
 	
     print('Accuracy: ', mlp.compute_accuracy(inputs, labels))
 
@@ -80,7 +80,7 @@ def mlp_plays_catch_game():
     mlp.create_layer(512)
     mlp.create_layer(3)
 
-    parameters = np.load(os.path.join("TrainedModels", "model_test-20000-01.npy"))
+    parameters = np.load(os.path.join("TrainedModels", "model_mlp-4-20000-01.npy"))
     mlp.load_parameters(parameters.item())
 	
     catch_game = CatchGame()
