@@ -54,7 +54,7 @@ Module containing implemented neural networks.
 - **Data folder**: contains the data used to train a model.
 - **TrainedModels folder**: contains the trained models.
 - **DynamicMLP.py**: mlp (with arbitrary number of hidden layers) implemented using only numpy.
-- **KerasMLP.py**: mlp implemented with the Keras (built on top of the tensorflow) framework.
+- **KerasMLP.py**: mlp implemented with the Keras (built on top of the tensorflow) framework (used to validate data).
 - **Main.py**: train or test a mlp model.
 
 Commands:
