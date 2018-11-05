@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.join(sys.path[0]))
+sys.path.insert(0, os.path.join(sys.path[0], '..'))
 
 from CollectDataDQN.CatchGame import CatchGame
 from CollectDataDQN.DQN import DQN
@@ -59,6 +59,8 @@ class Data():
                 np.save(self.path_file,self.data)
 					
             print("Game: {:03d}, Wins: {:03d}".format(episode+1, num_wins), end="\r")
+        
+        np.save(self.path_file,self.data)
 			
     # Show all data in training data and separate in input and output data (image, output_move)
     def generate_input_and_output_data(self):
@@ -103,6 +105,6 @@ if __name__ == "__main__":
     data_catch_game = Data("training_data_catch_game_dqn_1.npy")
     catch_game = CatchGame()
     t = time.process_time()
-    data_catch_game.collect_data(catch_game, "rl-network-screenshot-catch-5000", 0)
+    data_catch_game.collect_data(catch_game, "rl-network-screenshot-catch-5000", 1)
     elapsed_time = time.process_time() - t
     print("Time elapsed: ", elapsed_time, "s")
