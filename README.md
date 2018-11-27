@@ -3,7 +3,7 @@ Using MLP to play simple games - Machine Learning Course - UFU
 
 ## Getting Started
 
-Instrutions to run the project...
+Instructions to run the project...
 
 ### Prerequisites (Packages)
 ```
@@ -24,8 +24,9 @@ git clone https://github.com/matheusprandini/MLP-Games.git
 
 #### Module 1: **CollectDataDQN** 
 
-Module to collect data from the catch game using an agent implemented with dqn technique.
+Module responsible to collect data from the catch game using an agent implemented with dqn technique.
 
+- **Data folder**: collected data files (move to the Data folder in the **NeuralNetworks** module to use them)
 - **CatchGame.py**: game environment.
 - **DQN.py**: agent implemented with dqn technique.
 - **Data.py**: responsible for collecting, saving and preprocessing the data from the interaction between the dqn agent and the catch game.
@@ -53,7 +54,7 @@ Module containing implemented neural networks.
 - **Data folder**: contains the data used to train a model.
 - **TrainedModels folder**: contains the trained models.
 - **DynamicMLP.py**: mlp (with arbitrary number of hidden layers) implemented using only numpy.
-- **KerasMLP.py**: mlp implemented with the Keras (built on top of the tensorflow) framework.
+- **KerasMLP.py**: mlp implemented with the Keras (built on top of the tensorflow) framework (used to validate data).
 - **Main.py**: train or test a mlp model.
 
 Commands:
