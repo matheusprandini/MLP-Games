@@ -71,16 +71,21 @@ class MLP:
             W_layer = self.parameters['W' + str(layer)]
             b_layer = self.parameters['b' + str(layer)]
 			
-			      # Activation Potential
+			# Activation Potential
             if layer == 1: # Compute linear activation from the input layer to the first hidden layer
                 Z = np.dot(W_layer, X.T) + b_layer
             else: # Compute linear activation from some hidden layer to a hidden layer or the output layer
                 Z = np.dot(W_layer, cache['A' + str(layer - 1)]) + b_layer
 			
             # Activation of the layer -> execute activation Function
-            A = self.relu(Z)
 			
-			      # Stores values in the cache
+            # Output Layer
+            if layer == (self.numberLayers - 1):
+                A = self.sigmoid(Z)
+            else:
+                A = self.relu(Z)
+			
+			# Stores values in the cache
             cache['Z' + str(layer)] = Z
             cache['A' + str(layer)] = A
          
@@ -106,7 +111,7 @@ class MLP:
         deltas = {}
 		
 		    # Number of examples
-        m = X.shape[1]
+        m = X.shape[0]
 
 		
         # Backward propagation: compute deltas for the neurons of all layers #	
@@ -116,7 +121,7 @@ class MLP:
         dZ_output_layer = cache['A' + str(self.numberLayers - 1)] - Y.T
 		
 		    ## Delta for the output layer weights: error * derivative_function(output value) * input value(output of the previous layer)
-        dW_output_layer = (1 / m) * -1 * np.dot(np.multiply(dZ_output_layer, self.relu_derivative(cache['A' + str(self.numberLayers - 1)])), cache['A' + str(self.numberLayers - 2)].T)
+        dW_output_layer = (1 / m) * -1 * np.dot(np.multiply(dZ_output_layer, self.sigmoid_derivative(cache['A' + str(self.numberLayers - 1)])), cache['A' + str(self.numberLayers - 2)].T)
 		
 		    ## Delta for the output layer bias
         db_output_layer = (1 / m) * -1 * np.sum(dZ_output_layer, axis=1, keepdims=True)
@@ -168,8 +173,8 @@ class MLP:
 		
         # Update each parameter (weights and biases)
         for layer in range(1,self.numberLayers):
-            new_parameters['W' + str(layer)] = (self.parameters['W' + str(layer)] * 1) + (learning_rate * deltas['dW' + str(layer)])
-            new_parameters['b' + str(layer)] = (self.parameters['b' + str(layer)] * 1) + (learning_rate * deltas['db' + str(layer)])
+            new_parameters['W' + str(layer)] = self.parameters['W' + str(layer)] + (learning_rate * deltas['dW' + str(layer)])
+            new_parameters['b' + str(layer)] = self.parameters['b' + str(layer)] + (learning_rate * deltas['db' + str(layer)])
 			
         self.parameters = new_parameters
 		
@@ -188,7 +193,7 @@ class MLP:
         Y = Y.T
         
         # Number of examples
-        m = Y.shape[1]        
+        m = Y.shape[0]        
         
         # Compute mean squared error (mse)
         mse = np.divide(np.sum(np.power(np.subtract(Y, AL), 2)), m)
@@ -236,7 +241,7 @@ class MLP:
             if np.abs(current_mse_cost - previous_mse_cost) <= epsilon:
                 break
               
-    def training_mlp_any_layers_with_number_iterations(self, X, Y, number_iterations=100000, learning_rate=0.1):
+    def training_mlp_any_layers_with_number_iterations(self, X, Y, number_iterations=100000, learning_rate=0.1, epsilon=1e-15, log_mse=False):
         """
         Implement the training stage of the MLP based on number of iterations
 
@@ -269,12 +274,10 @@ class MLP:
             # Update parameters
             self.update_parameters(deltas, learning_rate)
 			
-            print('Iteration: ', i, ' - MSE: ', current_mse_cost)
+            if log_mse:
+                print('Iteration: ', i, ' - MSE: ', current_mse_cost)
 
-        # Save model
-        np.save(os.path.join("TrainedModels", "model_test"), self.parameters)
-			
-    def predict(self, X):
+    def prediction(self, X):
         """
         Implement the test stage of the MLP
 
@@ -287,7 +290,7 @@ class MLP:
         
         # Compute the predictions
         A2, cache = self.forward_propagation(X)
-        predictions = A2.T
+        predictions = A2
         
         return predictions
       
@@ -304,7 +307,7 @@ class MLP:
         """
 
         # Compute the predictions
-        predictions = self.predict(X)
+        predictions = self.prediction(X)
         
         new_predictions = []
 
@@ -312,17 +315,19 @@ class MLP:
         for p in predictions:
             new_predictions.append(self.round_max_value_to_1(p))
 
-        new_predictions = np.array(new_predictions)
+        new_predictions = np.array(new_predictions).T
+        
+        #print(predictions.shape[1])
 
         # Compute correct predictions
         correct_predictions = 0
 
-        for i in range(predictions.shape[0]):
+        for i in range(predictions.shape[1]):
             if (new_predictions[i] == Y[i]).all():
                 correct_predictions += 1
 
         # Compute accuracy
-        accuracy = (correct_predictions / predictions.shape[0]) * 100
+        accuracy = (correct_predictions / predictions.shape[1]) * 100
 
         return accuracy
       

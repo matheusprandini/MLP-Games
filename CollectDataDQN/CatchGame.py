@@ -33,7 +33,7 @@ class CatchGame(object):
         # based on experimentation, the ball tends to move 4 times
         # between each paddle movement. Since here we alternate ball
         # and paddle movement, we make ball move 4x faster.
-        self.BALL_VELOCITY = 10
+        self.BALL_VELOCITY = 20
         self.PADDLE_VELOCITY = 20
         self.FONT_SIZE = 30
 #        self.MAX_TRIES_PER_GAME = 100
@@ -49,7 +49,7 @@ class CatchGame(object):
         self.paddle_x = self.GAME_WIDTH // 2
         self.game_score = 0
         self.reward = 0
-        self.ball_x = random.randint(0, self.GAME_WIDTH)
+        self.ball_x = random.randint(0, self.GAME_WIDTH-20)
         self.ball_y = self.GAME_CEILING
         self.num_tries = 0
         # set up display, clock, etc

@@ -77,10 +77,10 @@ def mlp_plays_catch_game():
 
     mlp.create_layer(1024)
     mlp.create_layer(1024)
-    mlp.create_layer(512)
+    mlp.create_layer(1024)
     mlp.create_layer(3)
 
-    parameters = np.load(os.path.join("TrainedModels", "model_mlp-4-2000-01.npy"))
+    parameters = np.load(os.path.join("TrainedModels", "model_test_catch.npy"))
     mlp.load_parameters(parameters.item())
 	
     catch_game = CatchGame()
