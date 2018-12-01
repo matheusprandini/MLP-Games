@@ -40,9 +40,7 @@ class KerasMLP():
         # Building a mlp
         model = models.Sequential()
         model.add(layers.Dense(1024, activation='relu', input_shape=(input_neurons,)))
-        model.add(layers.Dense(256, activation='relu'))
-        model.add(layers.Dense(128, activation='relu'))
-        model.add(layers.Dense(64, activation='relu'))
+        model.add(layers.Dense(1024, activation='relu'))
         model.add(layers.Dense(output_neurons, activation='sigmoid'))
 
 		# Show model's parameters
@@ -55,7 +53,7 @@ class KerasMLP():
         data = Data(data_file)
 
 		# Preprocess data
-        inputs, labels = data.preprocessing_data(self.num_actions)
+        inputs, labels = data.preprocessing_data(self.num_actions, 3)
 
         print(labels)
 
@@ -71,10 +69,10 @@ class KerasMLP():
         y_test = labels[split:]
 
         # Training the mlp
-        self.model.compile(optimizer=keras.optimizers.SGD(lr=0.1, momentum=0.0, decay=0.0, nesterov=False), loss='mean_squared_error', metrics=['accuracy'])
+        self.model.compile(optimizer=keras.optimizers.SGD(lr=0.05, momentum=0.0, decay=0.0, nesterov=False), loss='mean_squared_error', metrics=['accuracy'])
         self.model.fit(inputs, labels, epochs=50, batch_size=64)
 		
-        self.test_model(x_test, y_test)
+        self.test_model(inputs, labels)
 		
         # Save model in "TrainedModels" folder
         self.model.save(os.path.join("TrainedModels", model_name), overwrite=True)

@@ -110,20 +110,19 @@ class MLP:
         # Dict deltas
         deltas = {}
 		
-		    # Number of examples
+		# Number of examples
         m = X.shape[0]
-
 		
         # Backward propagation: compute deltas for the neurons of all layers #	
        
 		
-		    ## Compute error of the output layer (value obtained - desired value)
+		## Compute error of the output layer (value obtained - desired value)
         dZ_output_layer = cache['A' + str(self.numberLayers - 1)] - Y.T
 		
-		    ## Delta for the output layer weights: error * derivative_function(output value) * input value(output of the previous layer)
+		## Delta for the output layer weights: error * derivative_function(output value) * input value(output of the previous layer)
         dW_output_layer = (1 / m) * -1 * np.dot(np.multiply(dZ_output_layer, self.sigmoid_derivative(cache['A' + str(self.numberLayers - 1)])), cache['A' + str(self.numberLayers - 2)].T)
 		
-		    ## Delta for the output layer bias
+		## Delta for the output layer bias
         db_output_layer = (1 / m) * -1 * np.sum(dZ_output_layer, axis=1, keepdims=True)
 		
         dZ_previous_layer = dZ_output_layer
@@ -133,16 +132,16 @@ class MLP:
 		
         for layer in reversed(range(1,self.numberLayers - 1)):	
 
-			      ## Gradient of the hidden layer
+			## Gradient of the hidden layer
             dZ_hidden_layer = np.multiply(np.dot(self.parameters['W' + str(layer + 1)].T, dZ_previous_layer), self.relu_derivative(cache['A' + str(layer)]))
 		
-		        ## Delta for the hidden layer weights
+		    ## Delta for the hidden layer weights
             if layer == 1:
                 dW_hidden_layer = (1 / m) * -1 * np.dot(dZ_hidden_layer, X)
             else:
                 dW_hidden_layer = (1 / m) * -1 * np.dot(dZ_hidden_layer, cache['A' + str(layer-1)].T)
 		
-		        ## Delta for the hidden layer bias
+		    ## Delta for the hidden layer bias
             db_hidden_layer = (1 / m) * -1 * np.sum(dZ_hidden_layer, axis=1, keepdims=True)
 			
             dZ_previous_layer = dZ_hidden_layer
@@ -193,8 +192,8 @@ class MLP:
         Y = Y.T
         
         # Number of examples
-        m = Y.shape[0]        
-        
+        m = Y.shape[1]        
+
         # Compute mean squared error (mse)
         mse = np.divide(np.sum(np.power(np.subtract(Y, AL), 2)), m)
     
@@ -241,7 +240,7 @@ class MLP:
             if np.abs(current_mse_cost - previous_mse_cost) <= epsilon:
                 break
               
-    def training_mlp_any_layers_with_number_iterations(self, X, Y, number_iterations=100000, learning_rate=0.1, epsilon=1e-15, log_mse=False):
+    def training_mlp_any_layers_with_number_iterations(self, X, Y, number_iterations=100000, learning_rate=0.1, epsilon=1e-5, log_mse=False):
         """
         Implement the training stage of the MLP based on number of iterations
 
@@ -254,6 +253,9 @@ class MLP:
 
         """
         
+        epochs = []
+        mse = []
+		
         current_mse_cost = 0
         
         # Loop
@@ -274,10 +276,19 @@ class MLP:
             # Update parameters
             self.update_parameters(deltas, learning_rate)
 			
+            epochs.append(i)
+            mse.append(current_mse_cost)
+			
             if log_mse:
                 print('Iteration: ', i, ' - MSE: ', current_mse_cost)
+				
+            # Stop when mse between two consecutive epochs is less or equal than an epsilon
+            if np.abs(current_mse_cost - previous_mse_cost) <= epsilon:
+                break
+				
+        return epochs, mse
 
-    def prediction(self, X):
+    def predict(self, X):
         """
         Implement the test stage of the MLP
 
@@ -307,7 +318,7 @@ class MLP:
         """
 
         # Compute the predictions
-        predictions = self.prediction(X)
+        predictions = self.predict(X)
         
         new_predictions = []
 

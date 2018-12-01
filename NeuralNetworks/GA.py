@@ -63,13 +63,15 @@ class IndividualNN():
     def compute_fitness(self, dataset_inputs, dataset_labels):
         
         last_time = time.time()
+		
+        sampling = int(0.8 * dataset_inputs.shape[0])
         
         # Training the MLP
-        self.neural_network.training_mlp_any_layers_with_number_iterations(dataset_inputs[:], dataset_labels[:], 200, self.learning_rate, log_mse=False)
+        self.neural_network.training_mlp_any_layers_with_number_iterations(dataset_inputs[:sampling], dataset_labels[:sampling], 1000, self.learning_rate, log_mse=False)
         
         total_training_time = (time.time()-last_time)
         
-        test_accuracy = self.neural_network.compute_accuracy(dataset_inputs[:], dataset_labels[:])
+        test_accuracy = self.neural_network.compute_accuracy(dataset_inputs[sampling:], dataset_labels[sampling:])
         
         return test_accuracy, total_training_time
 		
@@ -335,12 +337,6 @@ def preprocessing_data(data, num_actions, colors):
 inputs_xor = np.array([[0,0],[0,1],[1,0],[1,1]])
 outputs_xor = np.array([[1,0],[0,1],[0,1],[1,0]])
 
-start = time.time()
-ga = GeneticAlgorithm(10, 10, 80, 10, 20)
-best_ind = ga.execute_ga_nn(inputs_xor, outputs_xor, 'xor')
-np.save("model_test_xor.npy", best_ind.neural_network.parameters)
-print('Time elapsed: ', (time.time() - start))
-
 '''data = list(np.load('training_data_catch_game_dqn_1.npy'))
 inputs, labels = preprocessing_data(data, 3, 1)
 
@@ -351,9 +347,21 @@ start = time.time()
 ga = GeneticAlgorithm(10, 10, 80, 10, 20)
 best_ind = ga.execute_ga_nn(inputs, labels, 'catch')
 np.save("model_test_catch.npy", best_ind.neural_network.parameters)
+print('Time elapsed: ', (time.time() - start))'''
+
+data = list(np.load('training_data_catch_game_dqn_rgb.npy'))
+inputs, labels = preprocessing_data(data, 3, 3)
+
+print(inputs.shape)
+print(labels.shape)
+
+start = time.time()
+ga = GeneticAlgorithm(10, 10, 80, 10, 20)
+best_ind = ga.execute_ga_nn(inputs, labels, 'catch_rgb')
+np.save("model_test_catch_rgb.npy", best_ind.neural_network.parameters)
 print('Time elapsed: ', (time.time() - start))
 
-data = list(np.load('data_fifa_4actions_RGB.npy'))
+'''data = list(np.load('data_fifa_4actions_RGB.npy'))
 inputs, labels = preprocessing_data(data, 4, 3)
 
 print(inputs.shape)
@@ -363,9 +371,9 @@ start = time.time()
 ga = GeneticAlgorithm(10, 10, 80, 10, 20)
 best_ind = ga.execute_ga_nn(inputs, labels, 'fifa')
 np.save("model_test_fifa.npy", best_ind.neural_network.parameters)
-print('Time elapsed: ', (time.time() - start))
+print('Time elapsed: ', (time.time() - start))'''
 
-data = list(np.load('training_data_snake_game_rgb.npy'))
+'''data = list(np.load('training_data_snake_game_rgb.npy'))
 inputs, labels = preprocessing_data(data, 4, 3)
 
 print(inputs.shape)
@@ -377,7 +385,14 @@ best_ind = ga.execute_ga_nn(inputs, labels, 'snake')
 np.save("model_test_snake.npy", best_ind.neural_network.parameters)
 print('Time elapsed: ', (time.time() - start))'''
 
-'''param = np.load('model_test.npy')
-mlp = MLP()
-mlp.load_parameters(param)
-print(mlp.parameters)'''
+'''data = list(np.load('training_data_snake_game_grayscale.npy'))
+inputs, labels = preprocessing_data(data, 4, 1)
+
+print(inputs.shape)
+print(labels.shape)
+
+start = time.time()
+ga = GeneticAlgorithm(10, 10, 80, 10, 20)
+best_ind = ga.execute_ga_nn(inputs, labels, 'snake')
+np.save("model_test_snake_grayscale.npy", best_ind.neural_network.parameters)
+print('Time elapsed: ', (time.time() - start))'''
